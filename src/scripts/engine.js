@@ -54,10 +54,36 @@ const cardData = [
     },
 ]
 
+async function getRandomCardId() {
+    const randomIndewx = Math.floor(Math.random() * cardData.length);
+    return cardData[randomIndewx].id;
+}
+
+
+async function createCardImage(idCard, fieldSide) {
+    const cardImage = document.createElement("img");
+    cardImage.setAttribute("height", "100px");
+    cardImage.setAttribute("src", "./src/assets/icons/card-back.png");
+    cardImage.setAttribute("data-id", idCard);
+    cardImage.classList.add("card");
+
+    if(fieldSide === playerSides.player1){
+        cardImage.addEventListener("click", ()=>{
+            setCardsFields(cardImage.getAttribute("data-id"));
+        })
+    }
+
+    cardImage.addEventListener("mouseover",  ()=>{
+        drawSelectCard(idCard)
+    });
+
+    return cardImage;
+}
+
 async function drawCards(cardNumbers, fieldSide) {
     for (let i = 0; i < cardNumbers; i++) {
         const randomIdCards = await getRandomCardId();
-        const cardImage = await function createCardImage(randomIdCards, fieldSide);
+        const cardImage = await createCardImage(randomIdCards, fieldSide);
 
 
         document.getElementById(fieldSide).appendChild(cardImage)
