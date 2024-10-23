@@ -27,14 +27,14 @@ const state = {
 
 
 
-const patjImages = "./src/assets/icons/";
+const pathImages = "./src/assets/icons/";
 
 const cardData = [
     {
         id: 0,
         name: "Blue Eyes White Dragon",
         type: "Paper",
-        img: `${patjImages}dragon.png`,
+        img: `${pathImages}dragon.png`,
         winOf: [1],
         loseOf: [2],
     },
@@ -42,7 +42,7 @@ const cardData = [
         id: 1,
         name: "Dark Magician",
         type: "Rock",
-        img: `${patjImages}magician.png`,
+        img: `${pathImages}magician.png`,
         winOf: [2],
         loseOf: [0],
     },
@@ -50,8 +50,8 @@ const cardData = [
         id: 2,
         name: "Exodia",
         type: "Scissor",
-        img: `${patjImages}exodia.png`,
-        winof: [0],
+        img: `${pathImages}exodia.png`,
+        winOf: [0],
         loseOf: [1],
     },
 ]
@@ -89,12 +89,12 @@ async function setCardsFields(cardId) {
     let computerCardId = await getRandomCardId();
 
     await showHiddenCardFieldImages(true)
-  
+
 
     await hiddenCardDetails()
 
     await drawCardsInField(cardId, computerCardId)
-    
+
 
     let duelResults = await checkDuelResults(cardId, computerCardId)
 
@@ -104,25 +104,25 @@ async function setCardsFields(cardId) {
 
 }
 
-async function drawCardsInField(cardId, computerCardId){
+async function drawCardsInField(cardId, computerCardId) {
     state.fieldCards.player.src = cardData[cardId].img
     state.fieldCards.computer.src = cardData[computerCardId].img
 }
 
-async function showHiddenCardFieldImages(value){
-    if (value === true){
+async function showHiddenCardFieldImages(value) {
+    if (value === true) {
         state.fieldCards.player.style.display = "block";
         state.fieldCards.computer.style.display = "block";
     }
 
-    if(value === false){
+    if (value === false) {
         state.fieldCards.player.style.display = "none";
         state.fieldCards.computer.style.display = "none";
     }
 }
 
 async function hiddenCardDetails() {
-    
+
     state.cardSprites.avatar.src = ""
     state.cardSprites.name.innerText = ""
     state.cardSprites.type.innerText = ""
@@ -194,19 +194,23 @@ async function resetDuel() {
 }
 
 
-async function playAudio(status){
+async function playAudio(status) {
     const audio = new Audio(`./src/assets/audios/${status}.wav`)
-    
-    try{
+
+    try {
         audio.play();
-    }catch{}
-    
+    } catch { }
+
 }
 
 function init() {
-showHiddenCardFieldImages(false)
+    showHiddenCardFieldImages(false)
     drawCards(5, state.playerSides.player1);
     drawCards(5, state.playerSides.computer);
+
+    const bgm = document.getElementById("bgm")
+    bgm.volume = 0.2;
+    bgm.play()
 }
 
 
