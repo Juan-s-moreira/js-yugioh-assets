@@ -16,13 +16,12 @@ const state = {
     },
     playerSides: {
         player1: "player-cards",
-        player1Box:  document.querySelector("#player-cards"),
+        player1BOX: document.querySelector("#player-cards"),
         computer: "computer-cards",
-        computerBox:  document.querySelector("#computer-cards"),
+        computerBOX: document.querySelector("#computer-cards"),
     },
     actions: {
         button: document.getElementById("next-duel"),
-
     },
 }
 
@@ -70,7 +69,7 @@ async function createCardImage(idCard, fieldSide) {
     cardImage.setAttribute("data-id", idCard);
     cardImage.classList.add("card");
 
-    if (fieldSide === playerSides.player1) {
+    if (fieldSide === state.playerSides.player1) {
         cardImage.addEventListener("mouseover", () => {
             drawSelectCard(idCard)
         });
@@ -104,13 +103,39 @@ async function setCardsFields(cardId) {
 
 }
 
+async function drawButton(text) {
+    state.actions.button.innerText = text
+    state.actions.button.style.dispplay = "block"
+}
+
+async function updateScore() {
+    state.score.scoreBox.innerText = `Win: ${state.score.playerScore}
+     | Lose: ${state.score.computerScore}`
+}
+
+async function checkDuelResults(playerCardId, computerCardId) {
+    let duelResults = "Empate"
+    let playerCard = cardData[playerCardId]
+
+    if (playerCard.winof.includes(computerCardId)) {
+        duelResults = "ganhou"
+        state.score.playerScore++;
+    }
+
+    if (playerCard.loseOf.includes(computerCardId)) {
+        duelResults = "results"
+        state.score.computerScore++;
+    }
+
+    return duelResults
+}
+
 async function removeAllCardsImages() {
-    let { computerBox, player1Box} = state.playerSides;
-    let imgElements =computerBox.querySelectorAll("img")
+    let { computerBOX, player1BOX } = state.playerSides;
+    let imgElements = computerBOX.querySelectorAll("img")
     imgElements.forEach((img) => img.remove());
 
-    cards = state.playerSides.player1Box;
-     imgElements = player1Box.querySelectorAll("img")
+    imgElements = player1BOX.querySelectorAll("img")
     imgElements.forEach((img) => img.remove())
 }
 
@@ -133,8 +158,8 @@ async function drawCards(cardNumbers, fieldSide) {
 
 
 function init() {
-    drawCards(5, playerSides.player1)
-    drawCards(5, playerSides.computer)
+    drawCards(5, state.playerSides.player1)
+    drawCards(5, state.playerSides.computer)
 }
 
 
