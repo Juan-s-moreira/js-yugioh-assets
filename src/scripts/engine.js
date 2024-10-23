@@ -35,7 +35,7 @@ const cardData = [
         name: "Blue Eyes White Dragon",
         type: "Paper",
         img: `${patjImages}dragon.png`,
-        winof: [1],
+        winOf: [1],
         loseOf: [2],
     },
     {
@@ -43,7 +43,7 @@ const cardData = [
         name: "Dark Magician",
         type: "Rock",
         img: `${patjImages}magician.png`,
-        winof: [2],
+        winOf: [2],
         loseOf: [0],
     },
     {
@@ -104,8 +104,8 @@ async function setCardsFields(cardId) {
 }
 
 async function drawButton(text) {
-    state.actions.button.innerText = text
-    state.actions.button.style.dispplay = "block"
+    state.actions.button.innerText = text;
+    state.actions.button.style.display = "block"
 }
 
 async function updateScore() {
@@ -114,20 +114,21 @@ async function updateScore() {
 }
 
 async function checkDuelResults(playerCardId, computerCardId) {
-    let duelResults = "Empate"
+    let duelResults = "Draw"
     let playerCard = cardData[playerCardId]
 
-    if (playerCard.winof.includes(computerCardId)) {
-        duelResults = "ganhou"
+    if (playerCard.winOf.includes(computerCardId)) {
+        duelResults = "win"
         state.score.playerScore++;
     }
 
     if (playerCard.loseOf.includes(computerCardId)) {
-        duelResults = "results"
+        duelResults = "lose"
         state.score.computerScore++;
     }
+    await playAudio(duelResults);
 
-    return duelResults
+    return duelResults;
 }
 
 async function removeAllCardsImages() {
@@ -156,6 +157,26 @@ async function drawCards(cardNumbers, fieldSide) {
     }
 }
 
+
+async function resetDuel() {
+    state.cardSprites.avatar.src = "";
+    state.actions.button.style.display = "none";
+
+    state.fieldCards.player.style.display = "none";
+    state.fieldCards.computer.style.display = "none";
+
+    init();
+}
+
+
+async function playAudio(status){
+    const audio = new Audio(`./src/assets/audios/${status}.wav`)
+    
+    try{
+        audio.play();
+    }catch{}
+    
+}
 
 function init() {
     drawCards(5, state.playerSides.player1)
